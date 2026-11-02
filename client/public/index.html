@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/svg+xml" href="%PUBLIC_URL%/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="32x32" href="%PUBLIC_URL%/favicon.png" />
+    <link rel="icon" type="image/png" sizes="192x192" href="%PUBLIC_URL%/logo192.png" />
+    <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#0a0d14" />
+    <meta
+      name="description"
+      content="ThreatLens - Intelligent Threat Inspection, Phishing & Malware Protection"
+    />
+    <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
+    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" crossorigin="anonymous">
+    <script>
+      (function () {
+        // Safe mock response for blocked telemetry calls
+        function createMockResponse() {
+          return new Response(JSON.stringify({ status: "ok" }), {
+            status: 200,
+            headers: { "Content-Type": "application/json" },
+          });
+        }
+
+        // 1. Intercept window.fetch to silently handle google-analytics and blocked telemetry
+        if (typeof window !== "undefined" && window.fetch) {
+          var originalFetch = window.fetch;
+          window.fetch = function (resource, init) {
+            try {
+              var url = "";
+              if (typeof resource === "string") {
+                url = resource;
+              } else if (resource && resource.url) {
+                url = resource.url;
+              }
+
+              if (url && (url.indexOf("google-analytics.com") !== -1 || url.indexOf("googletagmanager.com") !== -1 || url.indexOf("/collect") !== -1)) {
+                return Promise.resolve(createMockResponse());
+              }
+
+              return originalFetch.apply(this, arguments).catch(function (err) {
+                if (url && (url.indexOf("analytics") !== -1 || url.indexOf("telemetry") !== -1 || (err && err.message && err.message.indexOf("Failed to fetch") !== -1))) {
+                  return createMockResponse();
+                }
+                return Promise.reject(err);
+              });
+            } catch (e) {
+              return Promise.resolve(createMockResponse());
+            }
+          };
+        }
+
+        // 2. Intercept XMLHttpRequest to prevent blocked XHR errors
+        if (typeof window !== "undefined" && window.XMLHttpRequest) {
+          var OriginalXHR = window.XMLHttpRequest;
+          var originalOpen = OriginalXHR.prototype.open;
+          var originalSend = OriginalXHR.prototype.send;
+
+          OriginalXHR.prototype.open = function (method, url) {
+            this._url = url || "";
+            return originalOpen.apply(this, arguments);
+          };
+
+          OriginalXHR.prototype.send = function () {
+            if (this._url && (this._url.indexOf("google-analytics.com") !== -1 || this._url.indexOf("googletagmanager.com") !== -1)) {
+              // Silently simulate success
+              Object.defineProperty(this, "readyState", { value: 4, writable: true });
+              Object.defineProperty(this, "status", { value: 200, writable: true });
+              Object.defineProperty(this, "responseText", { value: "{}", writable: true });
+              if (typeof this.onload === "function") {
+                try { this.onload(); } catch (e) {}
+              }
+              return;
+            }
+            return originalSend.apply(this, arguments);
+          };
+        }
+
+        // 3. Stub global analytics objects
+        window.dataLayer = window.dataLayer || [];
+        window.gtag = window.gtag || function () {};
+        window.ga = window.ga || function () {};
+
+        // 4. Suppress unhandled rejection errors from extension scripts
+        window.addEventListener("unhandledrejection", function (event) {
+          if (event && event.reason) {
+            var reasonStr = String(event.reason.message || event.reason || "");
+            if (reasonStr.indexOf("google-analytics") !== -1 || reasonStr.indexOf("ERR_BLOCKED_BY_CLIENT") !== -1) {
+              event.preventDefault();
+            }
+          }
+        });
+      })();
+    </script>
+    <title>ThreatLens - Security Dashboard</title>
+  </head>
+  <body>
+    <noscript>You need to enable JavaScript to run ThreatLens.</noscript>
+    <div id="root"></div>
+  </body>
+</html>

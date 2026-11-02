@@ -1,0 +1,22 @@
+{
+  "name": "threatlens",
+  "version": "1.0.0",
+  "private": true,
+  "workspaces": [
+    "client",
+    "server"
+  ],
+  "scripts": {
+    "build:client": "npm run build --prefix client",
+    "build": "npm run build:client",
+    "start": "node --max-http-header-size=1048576 server/server.js",
+    "dev": "npm run build:client && node --max-http-header-size=1048576 server/server.js"
+  },
+  "dependencies": {
+    "d3": "^7.9.0",
+    "helmet": "^8.3.0",
+    "hls.js": "^1.7.0",
+    "sharp": "^0.35.3",
+    "tesseract.js": "^7.0.0"
+  }
+}

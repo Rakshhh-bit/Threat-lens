@@ -1,0 +1,26 @@
+# Dependencies
+node_modules/
+client/node_modules/
+server/node_modules/
+
+# Production builds
+client/build/
+dist/
+
+# Environment and sensitive keys
+.env
+.env.local
+.env.*.local
+server/.env
+client/.env
+client/.env.local
+
+# AI Studio artifacts and logs
+.aistudio/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# OS metadata
+.DS_Store
+Thumbs.db

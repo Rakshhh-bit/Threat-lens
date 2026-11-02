@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <linearGradient id="shieldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#4f46e5"/>
+      <stop offset="50%" stop-color="#2563eb"/>
+      <stop offset="100%" stop-color="#0284c7"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Rounded Square Container -->
+  <rect x="24" y="24" width="464" height="464" rx="120" ry="120" fill="url(#shieldGrad)" />
+
+  <!-- Shield Outline White -->
+  <path d="M 256,120 C 310,120 365,135 365,135 C 365,270 318,355 256,392 C 194,355 147,270 147,135 C 147,135 202,120 256,120 Z"
+        fill="none" stroke="#ffffff" stroke-width="28" stroke-linecap="round" stroke-linejoin="round" />
+</svg>

@@ -1,0 +1,21 @@
+[
+  {
+    "_id": "6a6d9c560162a41b0bd17cab",
+    "firstName": "r",
+    "lastName": "r",
+    "email": "rakshitrawal98@gmail.com",
+    "mobile": "",
+    "password": "$2b$12$SFUn4Ux.vqcWGEB0I/nbTO19kbWzNVFWTRDciVGv8pjEZ6o224gvy",
+    "role": "user",
+    "createdAt": "2026-08-01T07:12:22.431Z"
+  },
+  {
+    "_id": "6a6d9c560162a41b0bd17cae",
+    "firstName": "r",
+    "lastName": "r",
+    "email": "rakshitrawal625@gmail.com",
+    "password": "$2b$12$MBY7SxBk1XMxFwEqw1gQcer7ZMB78QgX4gUedZFBt.hLK9SUlJqaa",
+    "role": "user",
+    "createdAt": "2026-08-14T11:47:53.122Z"
+  }
+]
